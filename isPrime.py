@@ -56,27 +56,33 @@ def print_result(n, ALL=False):
     else:
         print(n, "is NOT prime")
 
+def execute(user_input):
+
+    user_input_re = re.compile('^ *[0-9]+ *$|^ *[0-9]+ [a-zA-Z]+ *$')
+    numbers_re    = re.compile('[0-9]+')
+
+    if user_input == "":
+        return
+
+    if user_input == 'q' or user_input == 'exit':
+        quit()
+
+    m = user_input_re.search(user_input)
+    num_match = numbers_re.search(user_input)
+    if m and num_match:
+        if "ALL" in user_input.upper():
+            print_result(user_input[num_match.start() : num_match.end()], True)
+
+        else: 
+            print_result(int(user_input))
+    else:
+        print("error: not valid input")
+
 if len(sys.argv) > 1:
     for term in sys.argv[1:]:
-        print_result(term)
+        execute(term)
 else:
-    user_input_re = re.compile('^[0-9]+$|^[0-9]+ [a-zA-Z]+$')
-    numbers_re    = re.compile('^[0-9]+')
     while True:
         user_input = input("> ")
-
-        if user_input == 'q' or user_input == 'exit':
-            quit()
-
-        m = user_input_re.search(user_input)
-        num_match = numbers_re.search(user_input)
-        if m:
-            if "ALL" in user_input.upper():
-                print_result(user_input[num_match.start() : num_match.end()], True)
-
-            else: 
-                print_result(int(user_input))
-        else:
-            print("error: not valid input")
-
+        execute(user_input)
 
